@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package mms;
+
+option cc_generic_services = true;
+
+
+message MediaHttpRequestPB {}
+message MediaHttpResponsePB {}
+
+
+service MediaManagerService {
+  rpc Handle(MediaHttpRequestPB) returns (MediaHttpResponsePB);
+}

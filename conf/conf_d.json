@@ -1,0 +1,38 @@
+{
+  "server": {
+    "listen_address": "localhost",
+    "port": 8091
+  },
+  "fs": {
+    "local_workspace": "/tmp/mms/workspace",
+    "gfs_mount_point": "/tmp/mms/gfs"
+  },
+  "db": {
+    "uri": "/tmp/dev_mms",
+    "engine": "leveldb"
+  },
+  "media": {
+    "media_server_prefix": "http://172.16.2.121"
+  },
+  "key_mgr": {
+    "key_server_prefix": "http://localhost:8091/key/v1"
+  },
+  "transcoder": {
+    "ffmpeg_executable_path": "/usr/local/bin/ffmpeg",
+    "ld": {
+      "audio": {
+        "sample": "48000"
+      },
+      "video": {
+        "size": "320x240",
+        "aspect": "4:3",
+        "bitrate": "800k",
+        "fps": "25"
+      }
+    },
+    "sd": {
+    },
+    "hd": {
+    }
+  }
+}

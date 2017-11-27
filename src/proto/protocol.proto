@@ -1,0 +1,87 @@
+syntax = "proto2";
+
+package mms;
+
+/////////////////// Protocol
+message TranscodeRequestPB {
+    // 将要转码的原始视频路径
+    required string media_source_path = 1;
+    // 当前仅支持 HLS
+    // TODO(xiang88): 支持MP4 转码加密
+    optional string media_target_format = 2;
+    optional string notify_url = 3;
+}
+
+message TranscodeResponsePB {
+    // MMS 表示资源的 ID
+    required string uuid = 1;
+}
+
+message QueryStateRequestPB {
+    // 资源ID
+    required string uuid = 1;
+}
+
+message QueryStateResponsePB {
+    // 资源ID
+    required string uuid = 1;
+    // 资源目前的状态
+    required string state = 2;
+}
+
+message AccessM3U8RequestPB {
+    // 资源ID
+    required string uuid = 1;
+}
+
+message AccessM3U8ResponsePB {
+    // 资源ID
+    required string uuid = 1;
+    // We will dynamic read the m3u8, and stream
+    // the new one.
+    //
+    // 生产的新的 M3U8 文件路径
+    // required string m3u8_path = 2;
+}
+
+message AccessKeyRequestPB {
+    // 资源ID
+    required string uuid = 1;
+    // 资源Token
+    // 由HandleAccessM3U8 生成
+    required string token = 2;
+}
+
+message AccessKeyResponsePB {
+    required string uuid = 1;
+    optional string key = 2;
+}
+
+////////////////// Metadata
+message TaskMetaPB {
+    required string uuid = 1;
+    required string state_str = 2;
+    required int32  state_int = 3;
+    required string media_source_path = 4;
+    required string target_format = 5;
+    optional string create_at = 6;
+    optional string last_update_at = 7;
+}
+
+///////////////// HLS Metadata
+message MediaKeyPB {
+    // TODO(xiang88):
+    // 加上 uuid
+    required string key = 1;
+    required string iv = 2;
+    // optional string create_at = 3;
+}
+
+message HLSMetaPB {
+    required string uuid = 1;
+    required string gfs_m3u8_path = 2;
+    required MediaKeyPB media_key = 3;
+    optional string create_at = 4;
+}
+
+//////////////// MP4 Metadata
