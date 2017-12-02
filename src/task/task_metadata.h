@@ -38,12 +38,14 @@ class TaskMetadata {
   void SetState(TaskState state);
   void SetTargetFormat(const std::string& format);
   void SetMediaSourcePath(const std::string& path);
+  void SetTargetSize(uint64_t target_size);
 
   std::string uuid() const;
   TaskState state() const;
   std::string state_as_string() const;
   std::string target_format() const;
   std::string media_source_path() const;
+  uint64_t target_size() const;
 
   std::string ToString() const;
   bool FromString(const std::string* str);

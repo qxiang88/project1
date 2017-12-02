@@ -73,6 +73,10 @@ void TaskMetadata::SetTargetFormat(const std::string &format) {
   meta_pb_.set_target_format(format);
 }
 
+void TaskMetadata::SetTargetSize(uint64_t target_size) {
+  meta_pb_.set_target_size(target_size);
+}
+
 std::string TaskMetadata::uuid() const {
   return meta_pb_.uuid();
 }
@@ -91,6 +95,10 @@ TaskState TaskMetadata::state() const {
 
 std::string TaskMetadata::target_format() const {
   return meta_pb_.target_format();
+}
+
+uint64_t TaskMetadata::target_size() const {
+  return meta_pb_.target_size();
 }
 
 // Serialize/De-serialize

@@ -926,6 +926,13 @@ class TaskMetaPB : public ::google::protobuf::Message {
   inline ::std::string* release_last_update_at();
   inline void set_allocated_last_update_at(::std::string* last_update_at);
 
+  // optional uint64 target_size = 8;
+  inline bool has_target_size() const;
+  inline void clear_target_size();
+  static const int kTargetSizeFieldNumber = 8;
+  inline ::google::protobuf::uint64 target_size() const;
+  inline void set_target_size(::google::protobuf::uint64 value);
+
   // @@protoc_insertion_point(class_scope:mms.TaskMetaPB)
  private:
   inline void set_has_uuid();
@@ -942,6 +949,8 @@ class TaskMetaPB : public ::google::protobuf::Message {
   inline void clear_has_create_at();
   inline void set_has_last_update_at();
   inline void clear_has_last_update_at();
+  inline void set_has_target_size();
+  inline void clear_has_target_size();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -953,6 +962,7 @@ class TaskMetaPB : public ::google::protobuf::Message {
   ::std::string* target_format_;
   ::std::string* create_at_;
   ::std::string* last_update_at_;
+  ::google::protobuf::uint64 target_size_;
   ::google::protobuf::int32 state_int_;
   friend void  protobuf_AddDesc_protocol_2eproto();
   friend void protobuf_AssignDesc_protocol_2eproto();
@@ -2691,6 +2701,30 @@ inline void TaskMetaPB::set_allocated_last_update_at(::std::string* last_update_
     last_update_at_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:mms.TaskMetaPB.last_update_at)
+}
+
+// optional uint64 target_size = 8;
+inline bool TaskMetaPB::has_target_size() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void TaskMetaPB::set_has_target_size() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void TaskMetaPB::clear_has_target_size() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void TaskMetaPB::clear_target_size() {
+  target_size_ = GOOGLE_ULONGLONG(0);
+  clear_has_target_size();
+}
+inline ::google::protobuf::uint64 TaskMetaPB::target_size() const {
+  // @@protoc_insertion_point(field_get:mms.TaskMetaPB.target_size)
+  return target_size_;
+}
+inline void TaskMetaPB::set_target_size(::google::protobuf::uint64 value) {
+  set_has_target_size();
+  target_size_ = value;
+  // @@protoc_insertion_point(field_set:mms.TaskMetaPB.target_size)
 }
 
 // -------------------------------------------------------------------

@@ -66,6 +66,7 @@ message TaskMetaPB {
     required string target_format = 5;
     optional string create_at = 6;
     optional string last_update_at = 7;
+    optional uint64 target_size = 8;
 }
 
 ///////////////// HLS Metadata

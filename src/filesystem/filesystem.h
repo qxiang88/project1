@@ -42,7 +42,6 @@ class Filesystem {
   corgi::Status CreateLocalMediaRootIfNotExist(const std::string& uuid);
   corgi::Status CreateGFSMediaRootIfNotExist(const std::string& uuid);
 
-  // TODO(xiang88):
   corgi::Status Copy(CopierParameter parameter);
   corgi::Status Cleanup(std::string path);
 

@@ -2,11 +2,11 @@
 // Created by wangqixiang on 2017/11/14.
 //
 
-#include <filesystem/filesystem.h>
+#include "filesystem/filesystem.h"
 #include "task/task.h"
 #include "corgi/strings/substitute.h"
 #include "transcode/transcoder.h"
-
+#include "util/directory_sizer.h"
 #include "task/notifier.h"
 
 namespace mms {
@@ -65,7 +65,9 @@ corgi::Status Task::NotifyTaskState() {
           << " error: " << status.ToString();
       return status;
     }
-    status = notifier->NotifyTaskState(metadata_.uuid(), metadata_.state());
+    status = notifier->NotifyTaskState(metadata_.uuid(),
+                                       metadata_.state(),
+                                       metadata_.target_size());
     if (!status.ok()) {
       LOG(ERROR) << "Error notify to: " << notify_url_
           << " error: " << status.ToString();
@@ -88,6 +90,18 @@ HLSTranscodeTask::HLSTranscodeTask(const TaskMetadata &metadata,
 }
 
 void HLSTranscodeTask::OnComplete() {
+  // 获取目标大小:
+  DirectorySizer target_sizer(Filesystem::Default()->GetLocalMediaRoot(metadata_.uuid()),
+                              "*.ts");
+  uint64_t total_ts_size;
+  corgi::Status s = target_sizer.ComputeSizeRecursely(&total_ts_size);
+  if (!s.ok()) {
+    LOG(WARNING) << "Warning: compute size of : " << Filesystem::Default()->GetLocalMediaRoot(metadata_.uuid())
+                 << " error: " << s.ToString();
+  } else {
+    metadata_.SetTargetSize(total_ts_size);
+  }
+
   CG_LOG_IF_ERROR(ChangeStateAndStore(kTranscodeAndEncryptDone));
   // Copy 本地工作目录的文件到GFS挂载点
   CopierParameter param;

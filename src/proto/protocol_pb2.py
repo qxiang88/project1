@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='protocol.proto',
   package='mms',
-  serialized_pb=_b('\n\x0eprotocol.proto\x12\x03mms\"`\n\x12TranscodeRequestPB\x12\x19\n\x11media_source_path\x18\x01 \x02(\t\x12\x1b\n\x13media_target_format\x18\x02 \x01(\t\x12\x12\n\nnotify_url\x18\x03 \x01(\t\"#\n\x13TranscodeResponsePB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\"#\n\x13QueryStateRequestPB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\"3\n\x14QueryStateResponsePB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\r\n\x05state\x18\x02 \x02(\t\"#\n\x13\x41\x63\x63\x65ssM3U8RequestPB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\"$\n\x14\x41\x63\x63\x65ssM3U8ResponsePB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\"1\n\x12\x41\x63\x63\x65ssKeyRequestPB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\r\n\x05token\x18\x02 \x02(\t\"0\n\x13\x41\x63\x63\x65ssKeyResponsePB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\x0b\n\x03key\x18\x02 \x01(\t\"\x9d\x01\n\nTaskMetaPB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\x11\n\tstate_str\x18\x02 \x02(\t\x12\x11\n\tstate_int\x18\x03 \x02(\x05\x12\x19\n\x11media_source_path\x18\x04 \x02(\t\x12\x15\n\rtarget_format\x18\x05 \x02(\t\x12\x11\n\tcreate_at\x18\x06 \x01(\t\x12\x16\n\x0elast_update_at\x18\x07 \x01(\t\"%\n\nMediaKeyPB\x12\x0b\n\x03key\x18\x01 \x02(\t\x12\n\n\x02iv\x18\x02 \x02(\t\"g\n\tHLSMetaPB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\x15\n\rgfs_m3u8_path\x18\x02 \x02(\t\x12\"\n\tmedia_key\x18\x03 \x02(\x0b\x32\x0f.mms.MediaKeyPB\x12\x11\n\tcreate_at\x18\x04 \x01(\t')
+  serialized_pb=_b('\n\x0eprotocol.proto\x12\x03mms\"`\n\x12TranscodeRequestPB\x12\x19\n\x11media_source_path\x18\x01 \x02(\t\x12\x1b\n\x13media_target_format\x18\x02 \x01(\t\x12\x12\n\nnotify_url\x18\x03 \x01(\t\"#\n\x13TranscodeResponsePB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\"#\n\x13QueryStateRequestPB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\"3\n\x14QueryStateResponsePB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\r\n\x05state\x18\x02 \x02(\t\"#\n\x13\x41\x63\x63\x65ssM3U8RequestPB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\"$\n\x14\x41\x63\x63\x65ssM3U8ResponsePB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\"1\n\x12\x41\x63\x63\x65ssKeyRequestPB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\r\n\x05token\x18\x02 \x02(\t\"0\n\x13\x41\x63\x63\x65ssKeyResponsePB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\x0b\n\x03key\x18\x02 \x01(\t\"\xb2\x01\n\nTaskMetaPB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\x11\n\tstate_str\x18\x02 \x02(\t\x12\x11\n\tstate_int\x18\x03 \x02(\x05\x12\x19\n\x11media_source_path\x18\x04 \x02(\t\x12\x15\n\rtarget_format\x18\x05 \x02(\t\x12\x11\n\tcreate_at\x18\x06 \x01(\t\x12\x16\n\x0elast_update_at\x18\x07 \x01(\t\x12\x13\n\x0btarget_size\x18\x08 \x01(\x04\"%\n\nMediaKeyPB\x12\x0b\n\x03key\x18\x01 \x02(\t\x12\n\n\x02iv\x18\x02 \x02(\t\"g\n\tHLSMetaPB\x12\x0c\n\x04uuid\x18\x01 \x02(\t\x12\x15\n\rgfs_m3u8_path\x18\x02 \x02(\t\x12\"\n\tmedia_key\x18\x03 \x02(\x0b\x32\x0f.mms.MediaKeyPB\x12\x11\n\tcreate_at\x18\x04 \x01(\t')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -356,6 +356,13 @@ _TASKMETAPB = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='target_size', full_name='mms.TaskMetaPB.target_size', index=7,
+      number=8, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -368,7 +375,7 @@ _TASKMETAPB = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=425,
-  serialized_end=582,
+  serialized_end=603,
 )
 
 
@@ -404,8 +411,8 @@ _MEDIAKEYPB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=584,
-  serialized_end=621,
+  serialized_start=605,
+  serialized_end=642,
 )
 
 
@@ -455,8 +462,8 @@ _HLSMETAPB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=623,
-  serialized_end=726,
+  serialized_start=644,
+  serialized_end=747,
 )
 
 _HLSMETAPB.fields_by_name['media_key'].message_type = _MEDIAKEYPB

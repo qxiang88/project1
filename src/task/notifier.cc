@@ -32,11 +32,13 @@ corgi::Status Notifier::Serialize(const corgi::json::Value &v,
 }
 
 corgi::Status Notifier::NotifyTaskState(const std::string &uuid,
-                                        TaskState task_state) {
+                                        TaskState task_state,
+                                        uint64_t target_size) {
   std::string data;
   corgi::json::Value root;
   root["uuid"] = uuid;
   root["state"] = task_state;
+  root["size_in_bytes"] = target_size;
   CG_RETURN_IF_ERROR(Serialize(root, &data));
   return Notify(data);
 }

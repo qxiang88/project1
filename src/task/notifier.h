@@ -21,7 +21,8 @@ class Notifier {
 
   corgi::Status Serialize(const corgi::json::Value& v, std::string* result);
   corgi::Status NotifyTaskState(const std::string& uuid,
-                                TaskState task_state);
+                                TaskState task_state,
+                                uint64_t target_size);
 
  protected:
   virtual corgi::Status Notify(const std::string& data) = 0;

@@ -189,7 +189,7 @@ void protobuf_AssignDesc_protocol_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(AccessKeyResponsePB));
   TaskMetaPB_descriptor_ = file->message_type(8);
-  static const int TaskMetaPB_offsets_[7] = {
+  static const int TaskMetaPB_offsets_[8] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskMetaPB, uuid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskMetaPB, state_str_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskMetaPB, state_int_),
@@ -197,6 +197,7 @@ void protobuf_AssignDesc_protocol_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskMetaPB, target_format_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskMetaPB, create_at_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskMetaPB, last_update_at_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TaskMetaPB, target_size_),
   };
   TaskMetaPB_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -323,15 +324,15 @@ void protobuf_AddDesc_protocol_2eproto() {
     "\002(\t\"$\n\024AccessM3U8ResponsePB\022\014\n\004uuid\030\001 \002("
     "\t\"1\n\022AccessKeyRequestPB\022\014\n\004uuid\030\001 \002(\t\022\r\n"
     "\005token\030\002 \002(\t\"0\n\023AccessKeyResponsePB\022\014\n\004u"
-    "uid\030\001 \002(\t\022\013\n\003key\030\002 \001(\t\"\235\001\n\nTaskMetaPB\022\014\n"
+    "uid\030\001 \002(\t\022\013\n\003key\030\002 \001(\t\"\262\001\n\nTaskMetaPB\022\014\n"
     "\004uuid\030\001 \002(\t\022\021\n\tstate_str\030\002 \002(\t\022\021\n\tstate_"
     "int\030\003 \002(\005\022\031\n\021media_source_path\030\004 \002(\t\022\025\n\r"
     "target_format\030\005 \002(\t\022\021\n\tcreate_at\030\006 \001(\t\022\026"
-    "\n\016last_update_at\030\007 \001(\t\"%\n\nMediaKeyPB\022\013\n\003"
-    "key\030\001 \002(\t\022\n\n\002iv\030\002 \002(\t\"g\n\tHLSMetaPB\022\014\n\004uu"
-    "id\030\001 \002(\t\022\025\n\rgfs_m3u8_path\030\002 \002(\t\022\"\n\tmedia"
-    "_key\030\003 \002(\0132\017.mms.MediaKeyPB\022\021\n\tcreate_at"
-    "\030\004 \001(\t", 726);
+    "\n\016last_update_at\030\007 \001(\t\022\023\n\013target_size\030\010 "
+    "\001(\004\"%\n\nMediaKeyPB\022\013\n\003key\030\001 \002(\t\022\n\n\002iv\030\002 \002"
+    "(\t\"g\n\tHLSMetaPB\022\014\n\004uuid\030\001 \002(\t\022\025\n\rgfs_m3u"
+    "8_path\030\002 \002(\t\022\"\n\tmedia_key\030\003 \002(\0132\017.mms.Me"
+    "diaKeyPB\022\021\n\tcreate_at\030\004 \001(\t", 747);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "protocol.proto", &protobuf_RegisterTypes);
   TranscodeRequestPB::default_instance_ = new TranscodeRequestPB();
@@ -2631,6 +2632,7 @@ const int TaskMetaPB::kMediaSourcePathFieldNumber;
 const int TaskMetaPB::kTargetFormatFieldNumber;
 const int TaskMetaPB::kCreateAtFieldNumber;
 const int TaskMetaPB::kLastUpdateAtFieldNumber;
+const int TaskMetaPB::kTargetSizeFieldNumber;
 #endif  // !_MSC_VER
 
 TaskMetaPB::TaskMetaPB()
@@ -2659,6 +2661,7 @@ void TaskMetaPB::SharedCtor() {
   target_format_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   create_at_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   last_update_at_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  target_size_ = GOOGLE_ULONGLONG(0);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -2712,7 +2715,18 @@ TaskMetaPB* TaskMetaPB::New() const {
 }
 
 void TaskMetaPB::Clear() {
-  if (_has_bits_[0 / 32] & 127) {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<TaskMetaPB*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  if (_has_bits_[0 / 32] & 255) {
+    ZR_(target_size_, state_int_);
     if (has_uuid()) {
       if (uuid_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         uuid_->clear();
@@ -2723,7 +2737,6 @@ void TaskMetaPB::Clear() {
         state_str_->clear();
       }
     }
-    state_int_ = 0;
     if (has_media_source_path()) {
       if (media_source_path_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         media_source_path_->clear();
@@ -2745,6 +2758,10 @@ void TaskMetaPB::Clear() {
       }
     }
   }
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -2871,6 +2888,21 @@ bool TaskMetaPB::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(64)) goto parse_target_size;
+        break;
+      }
+
+      // optional uint64 target_size = 8;
+      case 8: {
+        if (tag == 64) {
+         parse_target_size:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &target_size_)));
+          set_has_target_size();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2965,6 +2997,11 @@ void TaskMetaPB::SerializeWithCachedSizes(
       7, this->last_update_at(), output);
   }
 
+  // optional uint64 target_size = 8;
+  if (has_target_size()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(8, this->target_size(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -3046,6 +3083,11 @@ void TaskMetaPB::SerializeWithCachedSizes(
         7, this->last_update_at(), target);
   }
 
+  // optional uint64 target_size = 8;
+  if (has_target_size()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(8, this->target_size(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -3107,6 +3149,13 @@ int TaskMetaPB::ByteSize() const {
           this->last_update_at());
     }
 
+    // optional uint64 target_size = 8;
+    if (has_target_size()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
+          this->target_size());
+    }
+
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -3155,6 +3204,9 @@ void TaskMetaPB::MergeFrom(const TaskMetaPB& from) {
     if (from.has_last_update_at()) {
       set_last_update_at(from.last_update_at());
     }
+    if (from.has_target_size()) {
+      set_target_size(from.target_size());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -3186,6 +3238,7 @@ void TaskMetaPB::Swap(TaskMetaPB* other) {
     std::swap(target_format_, other->target_format_);
     std::swap(create_at_, other->create_at_);
     std::swap(last_update_at_, other->last_update_at_);
+    std::swap(target_size_, other->target_size_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
