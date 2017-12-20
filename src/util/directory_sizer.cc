@@ -28,6 +28,7 @@ corgi::Status DirectorySizer::DoComputeSize(bool recurse,
   children.push(path_);
   corgi::Status s;
 
+  // 广度遍历求出目录匹配文件的总大小
   do {
     std::vector<std::string> sub_files;
     std::string current_dir = children.top();
@@ -62,7 +63,7 @@ corgi::Status DirectorySizer::ComputeSize(uint64_t *result) {
   return DoComputeSize(false, result);
 }
 
-corgi::Status DirectorySizer::ComputeSizeRecursely(uint64_t *result) {
+corgi::Status DirectorySizer::ComputeSizeRecursively(uint64_t *result) {
   return DoComputeSize(true, result);
 }
 

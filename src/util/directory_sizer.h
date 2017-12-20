@@ -20,7 +20,7 @@ class DirectorySizer {
                 corgi::Slice pattern);
 
   corgi::Status ComputeSize(uint64_t* result);
-  corgi::Status ComputeSizeRecursely(uint64_t* result);
+  corgi::Status ComputeSizeRecursively(uint64_t *result);
 
  private:
   corgi::Status DoComputeSize(bool recurse, uint64_t* result);

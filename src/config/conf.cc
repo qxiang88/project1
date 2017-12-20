@@ -20,6 +20,7 @@ const std::string kDefDBEngine = "leveldb";
 const std::string kDefMediaServerPrefix = "http://localhost";
 
 const std::string kDefFFmpegExecutablePath = "/usr/local/bin/ffmpeg";
+const std::string kDefFFprobeExecutablePath = "/usr/local/bin/ffprobe";
 
 const std::string kDefLDAudioSample = "48000";
 const std::string kDefLDVideoSize = "320x240";
@@ -118,6 +119,12 @@ std::string Conf::GetFFmpegExecutablePath() const {
   corgi::mutex_lock l(mu_);
   std::string v = root_["transcoder"]["ffmpeg_executable_path"].asString();
   return v.empty() ? kDefFFmpegExecutablePath : v;
+}
+
+std::string Conf::GetFFprobeExecutablePath() const {
+  corgi::mutex_lock l(mu_);
+  std::string v = root_["transcoder"]["ffprobe_executable_path"].asString();
+  return v.empty() ? kDefFFprobeExecutablePath : v;
 }
 
 std::string Conf::GetLDAudioSample() const {

@@ -32,6 +32,7 @@ class Conf {
 
   // Transcoder's info
   std::string GetFFmpegExecutablePath() const;
+  std::string GetFFprobeExecutablePath() const;
   std::string GetLDAudioSample() const;
   std::string GetLDVideoSize() const;
   std::string GetLDVideoAspect() const;

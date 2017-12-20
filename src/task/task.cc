@@ -94,7 +94,7 @@ void HLSTranscodeTask::OnComplete() {
   DirectorySizer target_sizer(Filesystem::Default()->GetLocalMediaRoot(metadata_.uuid()),
                               "*.ts");
   uint64_t total_ts_size;
-  corgi::Status s = target_sizer.ComputeSizeRecursely(&total_ts_size);
+  corgi::Status s = target_sizer.ComputeSizeRecursively(&total_ts_size);
   if (!s.ok()) {
     LOG(WARNING) << "Warning: compute size of : " << Filesystem::Default()->GetLocalMediaRoot(metadata_.uuid())
                  << " error: " << s.ToString();
