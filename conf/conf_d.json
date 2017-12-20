@@ -18,6 +18,7 @@
     "key_server_prefix": "http://localhost:8091/key/v1"
   },
   "transcoder": {
+    "ffprobe_executable_path": "/usr/local/bin/ffprobe",
     "ffmpeg_executable_path": "/usr/local/bin/ffmpeg",
     "ld": {
       "audio": {

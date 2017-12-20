@@ -17,6 +17,7 @@ class OutputFormatter {
   virtual ~OutputFormatter();
   virtual std::string FormatOutput() = 0;
   virtual OutputFormatter* Clone() = 0;
+
  private:
   CG_DISALLOW_COPY_AND_ASSIGN(OutputFormatter);
 };
@@ -59,6 +60,11 @@ class CommandBuilder {
 
   virtual CommandBuilder* Clone();
 
+  CommandBuilder& set_keep_aspect(bool v) {
+    keep_aspect_ = v;
+    return *this;
+  }
+
   corgi::Status BuildLowDefinitionCommand(Command* result);
   // TODO(xiang88):
   // 还未开启高清转码
@@ -71,6 +77,9 @@ class CommandBuilder {
   Conf* conf_;
   std::string media_source_path_;
   std::unique_ptr<OutputFormatter> output_formatter_;
+
+  // 保留原始视频的比例
+  bool keep_aspect_{true};
 
   // Build Parts
   std::string BuildGlobalOptions();

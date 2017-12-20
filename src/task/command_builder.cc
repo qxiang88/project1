@@ -4,6 +4,7 @@
 
 #include "task/command_builder.h"
 #include "corgi/strings/substitute.h"
+#include "util/media_meta.h"
 
 
 namespace mms {
@@ -83,13 +84,28 @@ CommandBuilder* CommandBuilder::Clone() {
 corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
   std::string r;
 
+  // 增加保留原始视频的比率
+  std::string video_aspect = conf_->GetLDVideoAspect();
+  {
+    MediaMeta media_meta(media_source_path_);
+    corgi::Status status = media_meta.Init();
+    if (!status.ok()) {
+      LOG(ERROR) << "Get media meta data error: " << status.ToString();
+      LOG(ERROR) << "We keep use Conf file data";
+    }
+    if (keep_aspect_) {
+      video_aspect = media_meta.GetVideoAspectAsString() == "0" ?
+                     video_aspect : media_meta.GetVideoAspectAsString();
+    }
+  }
+
   r = corgi::strings::Substitute(
     kFFmpegTemplate.c_str(),
     BuildGlobalOptions(),
     BuildInputFile(),
     BuildCodec(),
     BuildAudioSample(conf_->GetLDAudioSample()),
-    BuildVideoSize(conf_->GetLDVideoSize(), conf_->GetLDVideoAspect()),
+    BuildVideoSize(conf_->GetLDVideoSize(), video_aspect),
     BuildVideoFps(conf_->GetLDVideoFps()),
     BuildVideoBitrate(conf_->GetLDVideoBitrate()),
     BuildH264Info(),

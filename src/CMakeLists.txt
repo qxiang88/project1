@@ -41,7 +41,7 @@ link_directories(/usr/local/Cellar/openssl/1.0.2m/lib/ /usr/local/lib)
 file(GLOB_RECURSE srcs ${PROJECT_SOURCE_DIR}/src/*/*.cc)
 list(REMOVE_ITEM srcs ${PROJECT_SOURCE_DIR}/src/server/main.cc)
 add_library(transcode SHARED ${srcs})
-target_link_libraries(transcode transcode-proto corgi brpc ssl crypto leveldb snappy)
+target_link_libraries(transcode transcode-proto corgi brpc ssl crypto leveldb snappy m)
 
 # --[ MMS
 set(mms_main ${PROJECT_SOURCE_DIR}/src/server/main.cc)
