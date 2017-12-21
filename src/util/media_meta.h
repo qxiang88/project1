@@ -20,6 +20,7 @@ class MediaMeta {
   int64_t GetVideoWidth() const;
   int64_t GetVideoHeight() const;
   double GetVideoAspect() const;
+  bool IsVerticalScreen() const;
 
   std::string GetVideoAspectAsString() const;
 

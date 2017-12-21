@@ -86,6 +86,7 @@ corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
 
   // 增加保留原始视频的比率
   std::string video_aspect = conf_->GetLDVideoAspect();
+  std::string video_size = conf_->GetLDVideoSize();
   {
     MediaMeta media_meta(media_source_path_);
     corgi::Status status = media_meta.Init();
@@ -97,6 +98,11 @@ corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
       video_aspect = media_meta.GetVideoAspectAsString() == "0" ?
                      video_aspect : media_meta.GetVideoAspectAsString();
     }
+    // 原始视频是竖屏, 我们需要旋转配置文件中的 WxH
+    if (media_meta.IsVerticalScreen()) {
+      std::vector<std::string> s = corgi::str_util::Split(video_size, "x");
+      video_size = s[2] + s[1] + s[0];
+    }
   }
 
   r = corgi::strings::Substitute(
@@ -105,7 +111,7 @@ corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
     BuildInputFile(),
     BuildCodec(),
     BuildAudioSample(conf_->GetLDAudioSample()),
-    BuildVideoSize(conf_->GetLDVideoSize(), video_aspect),
+    BuildVideoSize(video_size, video_aspect),
     BuildVideoFps(conf_->GetLDVideoFps()),
     BuildVideoBitrate(conf_->GetLDVideoBitrate()),
     BuildH264Info(),

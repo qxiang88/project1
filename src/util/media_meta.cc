@@ -35,6 +35,13 @@ class MediaMeta::Rep {
     return format_[key].asString();
   }
 
+  // 如果高大于宽, 则说明是手机屏幕旋转的效果, 我们对于的转码参数
+  // 也要改变.
+  bool IsVerticalScreen() const {
+    return GetVideoInfoAsInt("height") >
+           GetVideoInfoAsInt("width");
+  }
+
  private:
   std::string media_path_;
   corgi::json::Value root_;
@@ -117,9 +124,14 @@ double MediaMeta::GetVideoAspect() const {
 std::string MediaMeta::GetVideoAspectAsString() const {
   // 支持 FFmpeg 识别
   double aspect = GetVideoAspect();
+  std::ostringstream os;
+  os.precision(5);
+  os << aspect;
+  return os.str();
+#if 0
   double k16x9Aspect = 1.7777;
   double k4x3Aspsect = 1.3333;
-  double kEpsilon = 0.0001;
+  double kEpsilon = 0.1;
 
   LOG(INFO) << "Delta1: " << std::fabs(aspect - k4x3Aspsect);
   LOG(INFO) << "Delta2: " << std::fabs(aspect - k16x9Aspect);
@@ -132,6 +144,7 @@ std::string MediaMeta::GetVideoAspectAsString() const {
     return "1.7777";
   }
   return "0";
+#endif
 }
 
 std::string MediaMeta::GetDuration() const {
@@ -140,6 +153,10 @@ std::string MediaMeta::GetDuration() const {
 
 std::string MediaMeta::GetSize() const {
   return rep_->GetFormat("size");
+}
+
+bool MediaMeta::IsVerticalScreen() const {
+  return rep_->IsVerticalScreen();
 }
 
 } // namespace mms
