@@ -101,7 +101,7 @@ corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
     // 原始视频是竖屏, 我们需要旋转配置文件中的 WxH
     if (media_meta.IsVerticalScreen()) {
       std::vector<std::string> s = corgi::str_util::Split(video_size, "x");
-      video_size = s[2] + s[1] + s[0];
+      video_size = s[1] + "x" + s[0];
     }
   }
 
