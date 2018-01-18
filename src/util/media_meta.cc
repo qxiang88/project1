@@ -35,11 +35,17 @@ class MediaMeta::Rep {
     return format_[key].asString();
   }
 
+  int64_t GetWidth() const { return width_; }
+  int64_t GetHeight() const { return height_; }
+
   // 如果高大于宽, 则说明是手机屏幕旋转的效果, 我们对于的转码参数
   // 也要改变.
   bool IsVerticalScreen() const {
+    return is_vertical_screen_;
+#if 0
     return GetVideoInfoAsInt("height") >
            GetVideoInfoAsInt("width");
+#endif
   }
 
  private:
@@ -47,6 +53,10 @@ class MediaMeta::Rep {
   corgi::json::Value root_;
   corgi::json::Value video_stream_;
   corgi::json::Value format_;
+
+  int64_t width_{0};
+  int64_t height_{0};
+  bool is_vertical_screen_{false};
 };
 
 // ffprobe -v quiet -hide_banner -print_format json -show_
@@ -92,6 +102,24 @@ corgi::Status MediaMeta::Rep::Parse() {
     }
   }
   format_ = root_["format"];
+  //
+  // 处理视频信息
+  // 判断是否为横屏或者竖屏
+  //
+  if (!video_stream_.isNull()) {
+    if (video_stream_.isMember("tags") && video_stream_["tags"].isMember("rotate")) {
+      std::string rotate = video_stream_["tags"]["rotate"].asString();
+      if (rotate == "90" || rotate == "270") {
+        width_ = GetVideoInfoAsInt("height");
+        height_= GetVideoInfoAsInt("width");
+      }
+    } else {
+      width_ = GetVideoInfoAsInt("width");
+      height_= GetVideoInfoAsInt("height");
+    }
+    is_vertical_screen_ = height_ > width_;
+  }
+
   return corgi::Status::OK();
 }
 
@@ -109,11 +137,13 @@ MediaMeta::~MediaMeta() {}
 // Get*
 
 int64_t MediaMeta::GetVideoWidth() const {
-  return rep_->GetVideoInfoAsInt("width");
+//  return rep_->GetVideoInfoAsInt("width");
+  return rep_->GetWidth();
 }
 
 int64_t MediaMeta::GetVideoHeight() const {
-  return rep_->GetVideoInfoAsInt("height");
+//  return rep_->GetVideoInfoAsInt("height");
+  return rep_->GetHeight();
 }
 
 double MediaMeta::GetVideoAspect() const {
@@ -128,23 +158,6 @@ std::string MediaMeta::GetVideoAspectAsString() const {
   os.precision(5);
   os << aspect;
   return os.str();
-#if 0
-  double k16x9Aspect = 1.7777;
-  double k4x3Aspsect = 1.3333;
-  double kEpsilon = 0.1;
-
-  LOG(INFO) << "Delta1: " << std::fabs(aspect - k4x3Aspsect);
-  LOG(INFO) << "Delta2: " << std::fabs(aspect - k16x9Aspect);
-  LOG(INFO) << "Epsilon: " << kEpsilon;
-
-  if (std::fabs(aspect - k4x3Aspsect) < kEpsilon) {
-    return "1.3333";
-  }
-  if (std::fabs(aspect - k16x9Aspect) < kEpsilon) {
-    return "1.7777";
-  }
-  return "0";
-#endif
 }
 
 std::string MediaMeta::GetDuration() const {
