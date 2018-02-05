@@ -5,6 +5,7 @@
 #include "task/command_builder.h"
 #include "corgi/strings/substitute.h"
 #include "util/media_meta.h"
+#include "util/video_aspect_selector.h"
 
 
 namespace mms {
@@ -85,6 +86,7 @@ corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
   std::string r;
 
   // 增加保留原始视频的比率
+#if 0
   std::string video_aspect = conf_->GetLDVideoAspect();
   std::string video_size = conf_->GetLDVideoSize();
   {
@@ -104,6 +106,39 @@ corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
       video_size = s[1] + "x" + s[0];
     }
   }
+#endif
+  std::string video_aspect, video_size;
+  {
+    MediaMeta media_meta(media_source_path_);
+    corgi::Status status = media_meta.Init();
+    if (!status.ok()) {
+      LOG(ERROR) << "Get media meta data error: " << status.ToString();
+      LOG(ERROR) << "We keep use Conf file data";
+    }
+    VideoAspectSelector::AspectResolutionList aspect_list;
+    Conf::Default()->GetLDAspectAndSizes(aspect_list);
+    VideoAspectSelector aspect_selector;
+    aspect_selector.SetLdAspectResolutions(aspect_list);
+    std::string orig_width = std::to_string(media_meta.GetVideoWidth());
+    std::string orig_height = std::to_string(media_meta.GetVideoHeight());
+
+    VideoAspectSelector::AspectResolutionPair r =
+        aspect_selector.GetLDAspectResolutionByNearlyMatch(orig_width, orig_height);
+
+    auto match_aspects = corgi::str_util::Split(r.first, ":");
+    auto match_sizes = corgi::str_util::Split(r.second, "=");
+
+    if (media_meta.IsVerticalScreen()) {
+      LOG(INFO) << "Original video size: " << orig_height << "x" << orig_width;
+      video_aspect = corgi::strings::Substitute("$0:$1", match_aspects[1], match_aspects[0]);
+      video_size = corgi::strings::Substitute("$0x$1", match_sizes[1], match_sizes[0]);
+    } else {
+      LOG(INFO) << "Original video size: " << orig_width << "x" << orig_height;
+      video_aspect = corgi::strings::Substitute("$0:$1", match_aspects[0], match_aspects[1]);
+      video_size = corgi::strings::Substitute("$0x$1", match_sizes[0], match_sizes[1]);
+    }
+  }
+  LOG(INFO) << "Target video aspect: " << video_aspect << " size: " << video_size;
 
   r = corgi::strings::Substitute(
     kFFmpegTemplate.c_str(),

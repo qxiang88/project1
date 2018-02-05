@@ -10,6 +10,7 @@
 #include "corgi/json/json.h"
 
 #include <memory>
+#include "util/video_aspect_selector.h"
 
 namespace mms {
 
@@ -38,6 +39,8 @@ class Conf {
   std::string GetLDVideoAspect() const;
   std::string GetLDVideoBitrate() const;
   std::string GetLDVideoFps() const;
+
+  void GetLDAspectAndSizes(VideoAspectSelector::AspectResolutionList& result) const;
 
   // KeyManager's info
   std::string GetKeyServerPrefix() const;

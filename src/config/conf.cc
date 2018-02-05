@@ -160,4 +160,26 @@ std::string Conf::GetLDVideoFps() const {
   return v.empty() ? kDefLDVideoFps : v;
 }
 
+void Conf::GetLDAspectAndSizes(VideoAspectSelector::AspectResolutionList &result) const {
+  corgi::mutex_lock l(mu_);
+  if (root_["transcoder"]["ld"]["video"].isMember("sizes")) {
+    LOG(INFO) << "Ld size config in config file";
+    auto sizes = root_["transcoder"]["ld"]["video"]["sizes"];
+    for (int i=0; i < sizes.size(); i++) {
+      corgi::json::Value::Members names = sizes[i].getMemberNames();
+      for (int j = 0; j < names.size(); j++) {
+        std::string v = sizes[i][names[j]].asString();
+        result.push_back({names[j], v});
+      }
+    }
+  }
+  if (result.size() > 0) {
+    return;
+  }
+
+  LOG(INFO) << "Ld sizes config not exist in config file, we use "
+    << "VideoAspectSelector::kLowDefinitionAspectResolution.";
+  result = VideoAspectSelector::kLowDefinitionAspectResolutions;
+}
+
 } // namespace mms
