@@ -126,7 +126,7 @@ corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
         aspect_selector.GetLDAspectResolutionByNearlyMatch(orig_width, orig_height);
 
     auto match_aspects = corgi::str_util::Split(r.first, ":");
-    auto match_sizes = corgi::str_util::Split(r.second, "=");
+    auto match_sizes = corgi::str_util::Split(r.second, "x");
 
     if (media_meta.IsVerticalScreen()) {
       LOG(INFO) << "Original video size: " << orig_height << "x" << orig_width;
