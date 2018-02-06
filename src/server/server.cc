@@ -9,7 +9,9 @@
 namespace mms {
 
 Server::Server(const std::string &conf_path)
-    : conf_path_(conf_path) {}
+    : conf_path_(conf_path) {
+  LOG(INFO) << "Use config file path at: " << conf_path_;
+}
 
 Server::~Server() {}
 

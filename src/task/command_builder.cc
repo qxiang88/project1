@@ -25,9 +25,8 @@ const std::string kFFmpegTemplate =
     " $8";        // Output File Format
 
 const std::string kGlobalOptions =
-    " -loglevel panic"
-    " -hide_banner"
-    " -stats"
+    " -v quiet"
+    " -progress /dev/stdout"
     " -y";
 
 const std::string kCodecTemplate =

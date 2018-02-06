@@ -7,7 +7,7 @@
 
 #include <gflags/gflags.h>
 
-DEFINE_string(conf, "/tmp/conf_d.json", "Set conf file path");
+DEFINE_string(conf, "/opt/mms/etc/conf_d.json", "Set conf file path");
 
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
