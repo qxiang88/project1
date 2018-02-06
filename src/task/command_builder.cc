@@ -40,7 +40,7 @@ const std::string kVideoSizeTemplate =
     " -aspect $1";
 
 const std::string kVideoScaleTemplate =
-    " -vf \"scale='min($0,iw)':'min($1,ih)'\"";
+    " -vf scale='min($0,iw)':'min($1,ih)'";
 
 const std::string kVideoBitrateTemplate =
     " -b:v $0"
