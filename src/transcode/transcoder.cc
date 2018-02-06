@@ -45,7 +45,7 @@ class FFmpegRunner : public corgi::ProcessObserver {
 
   corgi::Status Init() {
     ffempg_process_.SetProgram(command_.GetExecutablePath(), command_.ToVector());
-    ffempg_process_.SetChannelAction(corgi::CHAN_STDOUT, corgi::ACTION_PIPE);
+    ffempg_process_.SetChannelAction(corgi::CHAN_STDOUT, corgi::ACTION_DUPPARENT);
     ffempg_process_.SetChannelAction(corgi::CHAN_STDERR, corgi::ACTION_PIPE);
     if (observer_) {
       ffempg_process_.SetObserver(this);
@@ -68,7 +68,7 @@ class FFmpegRunner : public corgi::ProcessObserver {
     LOG(INFO) << "OnStdout: " << message;
     observer_(message);
   }
-  virtual void OnStderr(const std::string&  message ) override {
+  virtual void OnStderr(const std::string&  message) override {
     LOG(INFO) << "OnStderr: " << message;
     // TODO(xiang88):
     // 出错信息告诉Task? 还是只通过进程的 status?
