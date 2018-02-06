@@ -68,7 +68,7 @@ class FFmpegRunner : public corgi::ProcessObserver {
     LOG(INFO) << "OnStdout: " << message;
     observer_(message);
   }
-  virtual void OnStderr(const std::string&  message) override {
+  virtual void OnStderr(const std::string& message) override {
     LOG(INFO) << "OnStderr: " << message;
     // TODO(xiang88):
     // 出错信息告诉Task? 还是只通过进程的 status?

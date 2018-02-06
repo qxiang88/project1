@@ -87,6 +87,7 @@ class CommandBuilder {
   std::string BuildCodec();
   std::string BuildAudioSample(const std::string& sample);
   std::string BuildVideoSize(const std::string& size, const std::string& aspect);
+  std::string BuildVideoScale(const std::string& width, const std::string& height);
   std::string BuildVideoBitrate(const std::string& bitrate);
   std::string BuildVideoFps(const std::string& fps);
   std::string BuildH264Info();

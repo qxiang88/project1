@@ -39,6 +39,9 @@ const std::string kVideoSizeTemplate =
     " -s $0 "
     " -aspect $1";
 
+const std::string kVideoScaleTemplate =
+    " -vf \"scale='min($0,iw)':'min($1,ih)'\"";
+
 const std::string kVideoBitrateTemplate =
     " -b:v $0"
     " -minrate $0"
@@ -85,7 +88,8 @@ corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
   std::string r;
 
   // 增加保留原始视频的比率
-  std::string video_aspect, video_size;
+  // std::string video_aspect, video_size;
+  std::string video_width, video_height;
   {
     MediaMeta media_meta(media_source_path_);
     corgi::Status status = media_meta.Init();
@@ -103,20 +107,24 @@ corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
     VideoAspectSelector::AspectResolutionPair r =
         aspect_selector.GetLDAspectResolutionByNearlyMatch(orig_width, orig_height);
 
-    auto match_aspects = corgi::str_util::Split(r.first, ":");
+//    auto match_aspects = corgi::str_util::Split(r.first, ":");
     auto match_sizes = corgi::str_util::Split(r.second, "x");
 
     if (media_meta.IsVerticalScreen()) {
       LOG(INFO) << "Original video size: " << orig_height << "x" << orig_width;
-      video_aspect = corgi::strings::Substitute("$0:$1", match_aspects[1], match_aspects[0]);
-      video_size = corgi::strings::Substitute("$0x$1", match_sizes[1], match_sizes[0]);
+      video_width = match_sizes[1];
+      video_height = match_sizes[0];
+//      video_aspect = corgi::strings::Substitute("$0:$1", match_aspects[1], match_aspects[0]);
+//      video_size = corgi::strings::Substitute("$0x$1", match_sizes[1], match_sizes[0]);
     } else {
       LOG(INFO) << "Original video size: " << orig_width << "x" << orig_height;
-      video_aspect = corgi::strings::Substitute("$0:$1", match_aspects[0], match_aspects[1]);
-      video_size = corgi::strings::Substitute("$0x$1", match_sizes[0], match_sizes[1]);
+      video_width = match_sizes[0];
+      video_height = match_sizes[1];
+//      video_aspect = corgi::strings::Substitute("$0:$1", match_aspects[0], match_aspects[1]);
+//      video_size = corgi::strings::Substitute("$0x$1", match_sizes[0], match_sizes[1]);
     }
   }
-  LOG(INFO) << "Target video aspect: " << video_aspect << " size: " << video_size;
+  LOG(INFO) << "Target video size: " << video_width << "x" << video_height;
 
   r = corgi::strings::Substitute(
     kFFmpegTemplate.c_str(),
@@ -124,7 +132,8 @@ corgi::Status CommandBuilder::BuildLowDefinitionCommand(Command *result) {
     BuildInputFile(),
     BuildCodec(),
     BuildAudioSample(conf_->GetLDAudioSample()),
-    BuildVideoSize(video_size, video_aspect),
+    BuildVideoScale(video_width, video_height),
+//    BuildVideoSize(video_size, video_aspect),
     BuildVideoFps(conf_->GetLDVideoFps()),
     BuildVideoBitrate(conf_->GetLDVideoBitrate()),
     BuildH264Info(),
@@ -151,6 +160,9 @@ std::string CommandBuilder::BuildAudioSample(const std::string &sample) {
 }
 std::string CommandBuilder::BuildVideoSize(const std::string &size, const std::string& aspect) {
   return corgi::strings::Substitute(kVideoSizeTemplate.c_str(), size, aspect);
+}
+std::string CommandBuilder::BuildVideoScale(const std::string &width, const std::string &height) {
+  return corgi::strings::Substitute(kVideoScaleTemplate.c_str(), width, height);
 }
 std::string CommandBuilder::BuildVideoBitrate(const std::string &bitrate) {
   return corgi::strings::Substitute(kVideoBitrateTemplate.c_str(), bitrate);
