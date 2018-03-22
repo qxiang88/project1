@@ -79,6 +79,18 @@ corgi::Status Task::NotifyTaskState() {
   }
 }
 
+void Task::OnError(std::string msg) {
+  LOG(INFO) << "Task uuid: " << metadata_.uuid() << " On error: " << msg;
+  CG_LOG_IF_ERROR(ChangeStateAndStore(kTranscodingAndEncryptingError));
+
+  corgi::Status status = NotifyTaskState();
+  LOG(INFO) << "Notified uuid=" << uuid()
+            << " to url=" << notify_url_
+            << " : " << status.ToString();
+
+  delete this;
+}
+
 ///////////////////// HLSTranscodeTask
 
 HLSTranscodeTask::HLSTranscodeTask(const TaskMetadata &metadata,
@@ -108,20 +120,13 @@ void HLSTranscodeTask::OnComplete() {
   param.src = Filesystem::Default()->GetLocalMediaRoot(metadata_.uuid());
   param.dst = Filesystem::Default()->GetGFSMediaRoot(metadata_.uuid());
 
+  // 拷贝结束后, 把拷贝的状态发送给 Client
   CG_LOG_IF_ERROR(ChangeStateAndStore(kCopying));
   corgi::Status status = Filesystem::Default()->Copy(param);
   if (status.ok()) {
     CG_LOG_IF_ERROR(ChangeStateAndStore(kCopyDone));
     // 存储HLS元数据
     CG_LOG_IF_ERROR(task_storage_->StoreHLSMetadata(hls_meta_pb_.uuid(), &hls_meta_pb_));
-    // 发通知给 Client
-    // 如果发送失败, 则我们只是打日志.
-    // 后续, Client 可以进行主动查询.
-    //
-    status = NotifyTaskState();
-    LOG(INFO) << "Notified uuid=" << uuid()
-              << " to url=" << notify_url_
-              << " : " << status.ToString();
     // 清理本地文件
     status = Filesystem::Default()->Cleanup(param.src);
     LOG(INFO) << "cleanup: " << param.src << " : " << status.ToString();
@@ -130,6 +135,11 @@ void HLSTranscodeTask::OnComplete() {
                << " error: " << status.ToString();
     CG_LOG_IF_ERROR(ChangeStateAndStore(kCopyError));
   }
+  status = NotifyTaskState();
+  LOG(INFO) << "Notified uuid=" << uuid()
+            << " to url=" << notify_url_
+            << " : " << status.ToString();
+
   delete this;
 }
 

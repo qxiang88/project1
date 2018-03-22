@@ -65,11 +65,8 @@ class Task {
     CG_LOG_IF_ERROR(ChangeStateAndStore(kTranscodingAndEncrypting));
   }
 
-  virtual void OnError(std::string msg) {
-    LOG(INFO) << "Task uuid: " << metadata_.uuid() << " On error: " << msg;
-    CG_LOG_IF_ERROR(ChangeStateAndStore(kTranscodingAndEncryptingError));
-    delete this;
-  }
+  // 切片加密失败通知 Client
+  virtual void OnError(std::string msg);
 
   virtual void OnComplete() {
     LOG(INFO) << "Task uuid: " << metadata_.uuid() << " On complete";

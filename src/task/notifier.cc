@@ -38,6 +38,7 @@ corgi::Status Notifier::NotifyTaskState(const std::string &uuid,
   corgi::json::Value root;
   root["uuid"] = uuid;
   root["state"] = task_state;
+  root["status"] = TaskStateToString(task_state);
   root["size_in_bytes"] = target_size;
   CG_RETURN_IF_ERROR(Serialize(root, &data));
   return Notify(data);
